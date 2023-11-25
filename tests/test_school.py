@@ -1,6 +1,17 @@
 import pytest
 from src.school import ClassRoom, Teacher, Student, TooManyStudents
 
+# Fixture for creating a sample classroom with a teacher, students, and a course title.
+
+
+@pytest.fixture
+def sample_classroom():
+    teacher = Teacher(name="Professor Dumbledore")
+    students = [Student(name=f"Student {i+1}") for i in range(10)]
+    course_title = "Defense Against the Dark Arts"
+    return ClassRoom(teacher, students, course_title)
+
+
 # Test adding students to a classroom
 def test_add_students(sample_classroom):
     new_student = Student(name="Harry Potter")
