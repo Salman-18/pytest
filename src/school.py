@@ -4,7 +4,7 @@ class ClassRoom():
     def __init__(self, teachers, students, course_title):
         self.teachers = teachers
         self.students = students
-        self.course_tile = course_title
+        self.course_title = course_title
     
 
     def add_students(self, student):
