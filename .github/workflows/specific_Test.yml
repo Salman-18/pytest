@@ -30,6 +30,6 @@ jobs:
 
       - name: Run specific tests
         run: |
-          pytest --runxfail
+          pytest --pytest-xdist
 
 
