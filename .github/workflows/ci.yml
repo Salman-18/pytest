@@ -1,12 +1,9 @@
 name: Continuous Integration workflow
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:
@@ -29,10 +26,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest-xdist
 
-      - name: Run tests
+      - name: Identify changed files
+        id: changed-files
         run: |
-          pytest -v -x -k test_change_teacher
+          echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.py$' || true)"
+
+      - name: Run specific tests
+        run: |
+          changed_files=${{ steps.changed-files.outputs.changed-files }}
+          if [ -n "$changed_files" ]; then
+            pytest -v $changed_files
+          else
+            pytest -v
+          fi
 
 
         
