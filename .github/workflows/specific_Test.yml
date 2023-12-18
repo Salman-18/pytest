@@ -1,0 +1,38 @@
+name: Continuous Integration workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear Python cache
+        run: |
+          echo "Clearing Python cache"
+          sudo rm -rf /opt/hostedtoolcache/Python
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Identify changed Python files
+        id: changed-files
+        run: |
+          echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.py$' || true)"
+
+      - name: Run specific tests
+        run: |
+          changed_files=${{ steps.changed-files.outputs.changed-files }}
+          pytest -v $changed_files
