@@ -1,6 +1,5 @@
 name: Continuous Integration workflow
 
-# This workflow is triggered whenever a new PR is created on the main branch
 on:
   push:
     branches:
@@ -13,13 +12,18 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Clear Python cache
+        run: |
+          echo "Clearing Python cache"
+          sudo rm -rf /opt/hostedtoolcache/Python
+
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.10
+          python-version: 3.10.3
 
       - name: Install dependencies
         run: |
@@ -29,5 +33,6 @@ jobs:
       - name: Run tests
         run: |
           pytest
+
 
         
