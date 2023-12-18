@@ -16,7 +16,7 @@ def sample_classroom():
 def test_add_students(sample_classroom):
     new_student = Student(name="Harry Potter")
     sample_classroom.add_students(new_student)
-    assert len(sample_classroom.students) == 10
+    assert len(sample_classroom.students) == 11
     assert new_student in sample_classroom.students
 
 
