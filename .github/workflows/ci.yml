@@ -32,7 +32,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest -v -x test_circle.py::test_perimeter
+          pytest -v -x -k test_perimeter
 
 
         
