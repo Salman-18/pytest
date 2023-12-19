@@ -1,9 +1,6 @@
-name: Continuous Integration workflow
+name: Minimal CI workflow
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
@@ -11,12 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - name: Clear Python cache
-        run: |
-          echo "Clearing Python cache"
-          sudo rm -rf /opt/hostedtoolcache/Python
 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -32,7 +25,5 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest -v -x -k test_change_teacher
+          pytest -v
 
-
-        
