@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Clear Python cache
         run: |
@@ -26,12 +27,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest-xdist
 
       - name: Identify changed files
         id: changed-files
         run: |
-          echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.py$' || true)"
+          echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'src|tests' || true)"
 
       - name: Run specific tests
         run: |
