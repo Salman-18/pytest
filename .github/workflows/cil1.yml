@@ -27,7 +27,7 @@ jobs:
     - name: Determine and run affected tests
       run: |
         # Determine the affected files
-        changed_files=$(git diff --name-only HEAD^..HEAD)
+        changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
 
 
         # Run tests for each affected test file
