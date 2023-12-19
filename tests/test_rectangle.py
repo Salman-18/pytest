@@ -4,7 +4,7 @@ import src.shapes as shapes
 
 
 def test_area(my_rectangle):
-    assert my_rectangle.area() == 10 * 10
+    assert my_rectangle.area() == 10 * 20
 
 def test_perimeter(my_rectangle):
     assert my_rectangle.perimeter() == (10 * 2) + (20 * 2)
