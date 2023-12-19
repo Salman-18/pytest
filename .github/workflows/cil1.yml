@@ -1,0 +1,52 @@
+name: Dynamic Test Workflow
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Identify and run relevant tests
+      run: |
+        # Determine the affected files
+        changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+
+        # Extract the directory paths from the changed files
+        affected_paths=$(echo "$changed_files" | grep -Eo '.*/' | sort -u)
+
+        # Run tests for each affected path
+        for path in $affected_paths; do
+          # Check if the tests directory exists for the affected path
+          tests_directory="${path}tests"
+          if [ -d "$tests_directory" ]; then
+            # Identify Python files within the tests directory
+            test_files=$(find "$tests_directory" -name '*.py')
+
+            # Run tests for each Python file
+            for test_file in $test_files; do
+              # Run only the relevant tests that match the affected source file
+              source_file="${path}src/$(basename ${test_file/tests\//})"
+              if [ -f "$source_file" ]; then
+                pytest "$test_file"
+              fi
+            done
+          fi
+        done
