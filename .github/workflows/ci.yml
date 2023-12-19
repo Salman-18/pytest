@@ -1,4 +1,4 @@
-name: Minimal CI workflow
+name: Continuous Integration
 
 on:
   pull_request:
