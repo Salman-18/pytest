@@ -32,14 +32,21 @@ jobs:
         id: changed-files
         run: |
           echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.py$' || true)"
+          echo "Changed Files: ${{ steps.changed-files.outputs.changed-files }}"
+
+      - name: List Python Files
+        run: |
+          echo "All Python Files:"
+          git ls-files | grep -E '\.py$'
 
       - name: Run specific tests
         run: |
           changed_files=${{ steps.changed-files.outputs.changed-files }}
           if [ -n "$changed_files" ]; then
             # Discover and run all tests in the project
-            pytest -v $(git ls-files | grep -E 'tests.*\.py')
+            pytest -v
           else
             # Run all tests
             pytest -v
           fi
+
