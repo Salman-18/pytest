@@ -4,7 +4,7 @@ import math
 import time
 
 def test_add():
-    result = my_function.add(1, 4)
+    result = my_function.add(1, 5)
     assert result == 5
 
 def test_divide():
