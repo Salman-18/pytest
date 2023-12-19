@@ -1,4 +1,4 @@
-name: Continuous Integration workflow
+name: Minimal CI workflow
 
 on:
   pull_request:
@@ -10,11 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clear Python cache
-        run: |
-          echo "Clearing Python cache"
-          sudo rm -rf /opt/hostedtoolcache/Python
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -28,25 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Identify changed Python files
-        id: changed-files
+      - name: Run tests
         run: |
-          echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.py$' || true)"
-          echo "Changed Files: ${{ steps.changed-files.outputs.changed-files }}"
-
-      - name: List Python Files
-        run: |
-          echo "All Python Files:"
-          git ls-files | grep -E '\.py$'
-
-      - name: Run specific tests
-        run: |
-          changed_files=${{ steps.changed-files.outputs.changed-files }}
-          if [ -n "$changed_files" ]; then
-            # Discover and run all tests in the project
-            pytest -v
-          else
-            # Run all tests
-            pytest -v
-          fi
+          pytest -v
 
