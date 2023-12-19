@@ -2,9 +2,9 @@ name: Dynamic Test Workflow
 
 on:
   pull_request:
-    paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
+      paths:
+          - 'src/**/*.py'
+          - 'tests/**/*.py'
 
 jobs:
   test:
@@ -17,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: 10.0 x
 
     - name: Install dependencies
       run: |
