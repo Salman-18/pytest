@@ -28,19 +28,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Identify changed files
+      - name: Identify changed Python files
         id: changed-files
         run: |
-          echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'src|tests' || true)"
+          echo "::set-output name=changed-files::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.py$' || true)"
 
       - name: Run specific tests
         run: |
           changed_files=${{ steps.changed-files.outputs.changed-files }}
           if [ -n "$changed_files" ]; then
-            pytest -v $changed_files
+            # Discover and run all tests in the project
+            pytest -v $(git ls-files | grep -E 'tests.*\.py')
           else
+            # Run all tests
             pytest -v
           fi
-
-
-        
